@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <title>ascii html</title>
+    <script type="text/javascript" src="screen.js"></script>
+    <script type="text/javascript" src="game.js"></script>
+    <script>
+    var width = 80;
+    var height = 25;
+    var game;
+
+    function init(id) {
+      var screen = new Screen(id, width, height);
+      screen.clear();
+      var board = new Board();
+      var wall = new Wall();
+      var floor = new Wall();
+      floor.x = 22;
+      floor.y = 22;
+      floor.z = -1;
+      var sliderEW = new SliderEW();
+      var sliderNS = new SliderNS();
+      var charChanger = new CharChanger();
+      var moverEW = new MoverEW();
+      wall.bg = new Color(255, 127, 127, 127);
+      board.addObj(wall);
+      board.addObj(floor);
+      board.addObj(sliderEW);
+      board.addObj(sliderNS);
+      board.addObj(charChanger);
+      board.addObj(moverEW);
+      game = new Game(screen, board);
+      document.getElementById(id).onclick
+      document.onkeydown = keyDown;
+      document.onkeyup = keyUp;
+
+      charChanger.start();
+      moverEW.start();
+    }
+
+    var shift = false;
+    function keyDown(evt) {
+      //tab = 9
+      //shift = 16
+      //ctrl = 17
+      //alt = 18
+      //left = 37
+      //up = 38
+      //right = 39
+      //down = 40
+      if (evt.keyCode == 16) {
+        shift = true;
+      } else if(shift) {
+        if(evt.keyCode == 37) {
+          game.player.shootLeft();
+        } else if (evt.keyCode == 38) {
+          game.player.shootUp();
+        } else if (evt.keyCode == 39) {
+          game.player.shootRight();
+        } else if (evt.keyCode == 40) {
+          game.player.shootDown();
+        }
+      }
+      else {
+        if(evt.keyCode == 37) {
+          game.player.west();
+        } else if (evt.keyCode == 38) {
+          game.player.north();
+        } else if (evt.keyCode == 39) {
+          game.player.east();
+        } else if (evt.keyCode == 40) {
+          game.player.south();
+        }
+      }
+    }
+
+    function keyUp(evt) {
+      if (evt.keyCode == 16) {
+        shift = false;
+      }
+    }
+    </script>
+    <style type="text/css">
+    </style>
+  </head>
+  <body style="overflow:hidden;" bgcolor="#000" onload="init('canvas');">
+    <canvas id="canvas" style="border-style:solid;border-color:white;margin-left:auto;margin-right:auto;display:block;"></canvas>
+    <p id="messages" style="text-align:center;color:white;"></p>
+  </body>
+</html>
